@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->integer('status')->default(1);
-            $table->unsignedBigInteger('id_role')->default(9);
+            $table->unsignedBigInteger('id_role')->nullable();
             $table->foreign('id_role')->references('id')->on('roles')->onDelete('cascade');
             $table->unsignedBigInteger('id_client')->nullable();
             $table->foreign('id_client')->references('id')->on('list_client')->onDelete('cascade');

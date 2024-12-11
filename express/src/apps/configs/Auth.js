@@ -62,7 +62,7 @@ module.exports = async ($conn = null) => {
   passport.use(
    new LocalStrategy(async (username, password, done) => {
     try {
-     const res = await $conn.query("select usr.username, usr.email from users usr where usr.username = $1", [username]);
+     const res = await $conn.query("select usr.username, usr.email, usr.password from users usr where usr.username = $1", [username]);
      const user = res.rows[0];
      if (!user) return done(null, false, { message: "User not found" });
 

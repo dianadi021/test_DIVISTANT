@@ -1,8 +1,8 @@
-const { Client } = require("pg");
+const { Pool } = require("pg");
 
 const DB_CONNECT = process.env.DB_CONNECT;
 
-const $conn = new Client({
+const $conn = new Pool({
  host: `${process.env.DB_HOST}`,
  user: `${process.env.DB_USERNAME}`,
  password: `${process.env.DB_PASSWORD}`,

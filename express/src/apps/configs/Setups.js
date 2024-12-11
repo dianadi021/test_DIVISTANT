@@ -44,25 +44,25 @@ module.exports = async (app, express) => {
   }
 
   if (process.env.DB_CONNECT === "postgre") {
-   app.use(
-    session({
-     store: new PgStore({
-      $conn, // Koneksi PostgreSQL
-      tableName: "session", // Nama tabel sesi (default: 'session')
-     }),
-     secret: `${APP_SECRET}`,
-     resave: false,
-     saveUninitialized: false,
-     cookie: { secure: false }, // Atur secure true untuk HTTPS
-    })
-   );
+  //  app.use(
+  //   session({
+  //    store: new PgStore({
+  //     $conn, // Koneksi PostgreSQL
+  //     tableName: "session", // Nama tabel sesi (default: 'session')
+  //    }),
+  //    secret: `${APP_SECRET}`,
+  //    resave: false,
+  //    saveUninitialized: false,
+  //    cookie: { secure: false }, // Atur secure true untuk HTTPS
+  //   })
+  //  );
   }
 
   // Not Fixed Users Model;
   await require("./Auth.js")($conn);
 
-  app.use(passport.initialize());
-  app.use(passport.session());
+  // app.use(passport.initialize());
+  // app.use(passport.session());
  } catch (err) {
   console.log(`Setup catch err: ${err}`);
  }

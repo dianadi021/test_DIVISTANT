@@ -1,6 +1,5 @@
 const ResponseCode = require("../../apps/configs/ResponseCode.js");
 
-const { graphqlHTTP } = require("express-graphql");
 const passport = require("passport");
 
 class AuthInterfaces {
