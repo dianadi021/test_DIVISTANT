@@ -1,24 +1,16 @@
 const { Router } = require("express");
 const router = new Router();
 
-const AuthInterfaces = require("../interfaces/AuthInterfaces.js");
-const AuthService = require("../services/users/AuthService.js");
+const ServiceInterfaces = require("../interfaces/ServiceInterfaces.js");
 
-const Auth = new AuthService();
-const AuthEndpoint = new AuthInterfaces(Auth);
+const UserService = require("../services/users/UserService.js");
 
-// const ServiceInterfaces = require("../interfaces/ServiceInterfaces.js");
-// const RoleService = require("../services/users/RoleService.js");
-
-// const Roles = new RoleService();
-// const RoleEndpoint = new ServiceInterfaces(Roles);
+const Users = new UserService();
+const UserEndpoint = new ServiceInterfaces(Users);
 
 (async () => {
 	try {
-		// await RoleEndpoint.SetupData();
-
-		router.use(AuthEndpoint.SetupRouter());
-		// router.use("/roles", RoleEndpoint.SetupRouter());
+		router.use("/users", UserEndpoint.SetupRouter());
 	} catch (err) {
 		console.log(`Endpoint catch err: ${err}`);
 	}

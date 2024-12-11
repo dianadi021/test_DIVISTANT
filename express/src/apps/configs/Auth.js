@@ -67,7 +67,7 @@ module.exports = async ($conn = null) => {
      if (!user) return done(null, false, { message: "User not found" });
 
      // Validasi password
-     const isValid = await bcrypt.compare(password, user.password);
+     const isValid = await Bcrypt.compare(password, user.password);
      if (!isValid) return done(null, false, { message: "Incorrect password" });
 
      return done(null, user);
