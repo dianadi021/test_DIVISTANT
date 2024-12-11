@@ -1,11 +1,10 @@
 const { Router } = require("express");
 const router = new Router();
 
+const Users = require("./Users.js");
+
 try {
- if (process.env.DB_CONNECT === "mongodb") {
-  const Users = require("./Users.js");
-  router.use(Users);
- }
+ router.use(Users);
 } catch (err) {
  console.log(`URL API catch err: ${err}`);
 }

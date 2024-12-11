@@ -14,7 +14,7 @@ const DB_CONNECTIONS = async () => {
   await $conn
    .connect()
    .then((_) => {
-    console.log("Success connected to Server!");
+    console.log(`Success connected to ${DB_CONNECT} Server!`);
    })
    .catch((err) => {
     throw new Error(err);
