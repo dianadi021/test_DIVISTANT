@@ -1,0 +1,266 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"title": "Back End Test API",
+		"version": "1.0.0",
+		"description": "API for Back End Test"
+	},
+	"host": "localhost:9000",
+	"basePath": "/api",
+	"paths": {
+		"/books": {
+			"get": {
+				"summary": "Get all books",
+				"responses": {
+					"200": {
+						"description": "List of books"
+					}
+				}
+			},
+			"post": {
+				"summary": "Create a new book",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "book",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Book"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Book created"
+					}
+				}
+			}
+		},
+		"/books/title": {
+			"get": {
+				"summary": "Get Book by title",
+				"parameters": [
+					{
+						"name": "title",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Book details"
+					},
+					"404": {
+						"description": "Book not found"
+					}
+				}
+			}
+		},
+		"/books/code": {
+			"get": {
+				"summary": "Get Book by Code",
+				"parameters": [
+					{
+						"name": "code",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Book details"
+					},
+					"404": {
+						"description": "Book not found"
+					}
+				}
+			}
+		},
+		"/users": {
+			"get": {
+				"summary": "Get all users",
+				"responses": {
+					"200": {
+						"description": "List of users"
+					}
+				}
+			},
+			"post": {
+				"summary": "Create a new user",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "user",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "User created"
+					}
+				}
+			}
+		},
+		"/users/name": {
+			"get": {
+				"summary": "Get user by name",
+				"parameters": [
+					{
+						"name": "name",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User details"
+					},
+					"404": {
+						"description": "User not found"
+					}
+				}
+			}
+		},
+		"/users/code": {
+			"get": {
+				"summary": "Get user by Code",
+				"parameters": [
+					{
+						"name": "code",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User details"
+					},
+					"404": {
+						"description": "User not found"
+					}
+				}
+			}
+		},
+		"/libraries": {
+			"get": {
+				"summary": "Get all libraries",
+				"responses": {
+					"200": {
+						"description": "List of libraries"
+					}
+				}
+			},
+			"post": {
+				"summary": "Create a new library",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "library",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Library"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "User created"
+					}
+				}
+			}
+		},
+		"/libraries/user": {
+			"get": {
+				"summary": "Get user by user",
+				"parameters": [
+					{
+						"name": "idUser",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User details"
+					},
+					"404": {
+						"description": "User not found"
+					}
+				}
+			}
+		},
+		"/libraries/book": {
+			"get": {
+				"summary": "Get user by book",
+				"parameters": [
+					{
+						"name": "idBook",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User details"
+					},
+					"404": {
+						"description": "User not found"
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"Book": {
+			"type": "object",
+			"required": ["code", "title", "author", "stock"],
+			"properties": {
+				"code": {
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				},
+				"author": {
+					"type": "string"
+				},
+				"stock": {
+					"type": "number"
+				}
+			}
+		},
+		"User": {
+			"type": "object",
+			"required": ["code", "name"],
+			"properties": {
+				"code": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				}
+			}
+		},
+		"Library": {
+			"type": "object",
+			"required": ["book", "user"],
+			"properties": {
+				"book": {
+					"type": "_id MongoDB"
+				},
+				"user": {
+					"type": "_id MongoDB"
+				}
+			}
+		}
+	}
+}
