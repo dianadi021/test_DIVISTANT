@@ -22,12 +22,10 @@ class ServiceInterfaces {
 		const { Router } = require("express");
 		const router = new Router();
 
-		// router.all(/control/g, async (req, res, next) => {
-		// 	setTimeout(async () => {
-		// 		await this._Service.SetTempSavesDatas();
-		// 	}, 1000)
-		// 	next();
-		// });
+		router.all(/control/g, async (req, res, next) => {
+			await this._Service.SetTempSavesDatas();
+			next();
+		});
 
 		router.post(`/${section_control}/create`, async (req, res) => {
 			try {

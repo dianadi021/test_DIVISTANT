@@ -59,9 +59,7 @@ class UserService {
  }
 
  async SetTempSavesDatas() {
-  setTimeout(async () => {
-   await this._Repository.SetTempSavesDatas();
-  }, 1000);
+  await this._Repository.SetTempSavesDatas();
  }
 
  async CreateData(req, res) {

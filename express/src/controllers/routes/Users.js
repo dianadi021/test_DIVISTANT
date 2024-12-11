@@ -9,11 +9,15 @@ const Users = new UserService();
 const UserEndpoint = new ServiceInterfaces(Users);
 
 (async () => {
-	try {
-		router.use("/users", UserEndpoint.SetupRouter());
-	} catch (err) {
-		console.log(`Endpoint catch err: ${err}`);
-	}
+ try {
+  setTimeout(async function () {
+   await UserEndpoint.SetupData();
+  }, 7500);
+
+  router.use("/users", UserEndpoint.SetupRouter());
+ } catch (err) {
+  console.log(`Endpoint catch err: ${err}`);
+ }
 })();
 
 module.exports = router;

@@ -19,9 +19,8 @@ class RepositoryService {
  }
 
  async SetTempSavesDatas() {
-  setTimeout(async () => {
-   this.redisTempDatas = await this.model.find().exec();
-  }, 1000);
+  const $query = `SELECT * FROM ${this.name}`;
+  this.redisTempDatas = await $conn.query($query);
   console.log(`Save to temporary ${this.name}`);
  }
 
@@ -47,7 +46,46 @@ class RepositoryService {
 
  async Find() {
   try {
+   if (this.redisTempDatas.length) {
+    return this.redisTempDatas;
+   }
+
    const $query = `SELECT ${this.model} FROM ${this.name}`;
+   const callback = await $conn.query($query).then(($callback) => {
+    const { rows } = $callback;
+    if (rows.length) {
+     return rows;
+    } else {
+     return `Tidak ada data tersimpan`;
+    }
+   });
+
+   this.redisTempDatas = callback;
+
+   return callback;
+  } catch ($err) {
+   return `Kesalahan mengambil data data ${$err}`;
+  }
+ }
+
+ async FindById(id) {
+  try {
+   const $query = `SELECT * FROM ${this.name} WHERE id = ${id}`;
+   if (this.redisTempDatas.length) {
+    let tmpDatas = this.redisTempDatas.filter((list) => list.id == id);
+
+    return tmpDatas.length
+     ? tmpDatas
+     : await $conn.query($query).then(($callback) => {
+        const { rows } = $callback;
+        if (rows.length) {
+         return rows;
+        } else {
+         return `Tidak ada data tersimpan`;
+        }
+       });
+   }
+
    const callback = await $conn.query($query).then(($callback) => {
     const { rows } = $callback;
     if (rows.length) {
@@ -61,10 +99,6 @@ class RepositoryService {
   } catch ($err) {
    return `Kesalahan mengambil data data ${$err}`;
   }
- }
-
- async FindById(id) {
-  return this.redisTempDatas.length ? this.redisTempDatas.filter((list) => list._id == id) : await this.model.findById(id).exec();
  }
 
  async FindByFilter(filter) {

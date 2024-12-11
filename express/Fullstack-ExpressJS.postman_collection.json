@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Roles",
+			"name": "Users",
 			"item": [
 				{
 					"name": "create",
@@ -17,152 +17,96 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"skuadpro\",\r\n    \"level\": 21\r\n}",
+							"raw": "{\r\n    \"username\": \"username\",\r\n    \"email\": \"email\",\r\n    \"password\": \"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{url}}:{{port}}/{{api_path}}/{{roles_section}}/{{create}}"
+						"url": "{{url}}:{{port}}/{{api_path}}/users/{{logs_path}}/create"
 					},
 					"response": []
 				},
 				{
-					"name": "gets",
+					"name": "all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": "{{url}}:{{port}}/{{api_path}}/{{roles_section}}/{{gets}}"
-					},
-					"response": []
-				},
-				{
-					"name": "get",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{url}}:{{port}}/{{api_path}}/{{roles_section}}/{{get}}/668f55088bfd9f15bc6edae4"
-					},
-					"response": []
-				},
-				{
-					"name": "get_filter",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}:{{port}}/{{api_path}}/{{roles_section}}/{{get_filter}}?name=skuadolan0021",
-							"host": [
-								"{{url}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"{{api_path}}",
-								"{{roles_section}}",
-								"{{get_filter}}"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "skuadolan0021"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update",
-					"request": {
-						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"skuadolan021\",\r\n    \"level\": 210\r\n}",
+							"raw": "{\r\n    \"username\": \"username\",\r\n    \"email\": \"email\",\r\n    \"password\": \"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "{{url}}:{{port}}/{{api_path}}/{{roles_section}}/{{update}}/668f55088bfd9f15bc6edae4"
+						"url": "{{url}}:{{port}}/{{api_path}}/users/all"
 					},
 					"response": []
 				},
 				{
-					"name": "update_filter",
+					"name": "id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "PUT",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"skuadolan0021\",\r\n    \"level\": 2101\r\n}",
+							"raw": "{\r\n    \"username\": \"username\",\r\n    \"email\": \"email\",\r\n    \"password\": \"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{url}}:{{port}}/{{api_path}}/{{roles_section}}/{{get_filter}}/{{update}}?name=skuadolan",
-							"host": [
-								"{{url}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"{{api_path}}",
-								"{{roles_section}}",
-								"{{get_filter}}",
-								"{{update}}"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "skuadolan"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}:{{port}}/{{api_path}}/{{roles_section}}/{{delete}}/:id",
-							"host": [
-								"{{url}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"{{api_path}}",
-								"{{roles_section}}",
-								"{{delete}}",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete_filter",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": "{{url}}:{{port}}/{{api_path}}/{{roles_section}}/{{get_filter}}/{{delete}}"
+						"url": "{{url}}:{{port}}/{{api_path}}/users/details/1"
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"username\",\r\n    \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}:{{port}}/{{api_path}}/logout"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"username\",\r\n    \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}:{{port}}/{{api_path}}/login"
+			},
+			"response": []
 		}
 	],
 	"event": [
