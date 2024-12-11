@@ -1,6 +1,4 @@
 const ResponseCode = require("../../apps/configs/ResponseCode.js");
-
-const { graphqlHTTP } = require("express-graphql");
 const Control = require("../middlewares/Control.js");
 
 class ServiceInterfaces {

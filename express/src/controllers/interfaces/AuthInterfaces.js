@@ -30,15 +30,15 @@ class AuthInterfaces {
 
   router.post("/logout", this._Service.isAuthenticated, async (req, res) => {
    try {
-    const [isValid, Callback] = await this._Service
+    const [isValid] = await this._Service
      .LogoutAccount(req, res)
      .then((result) => [true, result])
      .catch((err) => [false, err]);
-
+     
     if (isValid) {
-     return res.status(ResponseCode.OKE).json({ status: true, message: Callback });
+     return res.status(ResponseCode.OKE).json({ status: true, message: "Berhasil logout" });
     } else {
-     throw new Error(`${Callback}`);
+     throw new Error(`Tidak ada session user`);
     }
    } catch (err) {
     return res.status(ResponseCode.SERVER_ERROR).json({ status: ResponseCode.SERVER_ERROR, message: `URL Endpoint Method catch ${err}` });
