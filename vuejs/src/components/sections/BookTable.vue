@@ -27,19 +27,73 @@
      },
     },
    ];
+
    await ContentLoaderDataTable(`${$base_url}/api/books/all`, `#content_loader`, dataTableshead);
   })();
 
   $("#content_loader").on("click", ".btn-edit", function () {
    const idData = $(this).data("id");
-   const idTitle = $(this).data("title");
-   alert(`${idTitle} - ${idData}`);
+   const titleData = $(this).data("title");
+   alert(`${titleData} - ${idData}`);
   });
 
   $("#content_loader").on("click", ".btn-delete", function () {
    const idData = $(this).data("id");
-   const idTitle = $(this).data("title");
-   alert(`${idTitle} - ${idData}`);
+   const titleData = $(this).data("title");
+
+   event.preventDefault();
+   Swal.fire({
+    title: "Apakah kamu yakin ingin melanjutkan?",
+    text: `Menghapus ${titleData}`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    cancelButtonText: "Batal",
+    confirmButtonText: "Oke!",
+   }).then((result) => {
+    if (result.isConfirmed) {
+     toastr.warning("Sedang diproses, mohon tunggu!", "Peringatan!");
+     $("#loadingAjax").show();
+
+     $.ajax({
+      url: `${$base_url}/api/books/control/delete/${idData}`,
+      type: "DELETE",
+      dataType: "json",
+      data: {
+       token: localStorage.getItem("login_token"),
+      },
+      xhrFields: {
+       withCredentials: true,
+      },
+      success: function (callback) {
+       const { message } = callback;
+       console.log("success", callback);
+       toastr.success(message, "Success!");
+
+       setTimeout(function () {
+        window.location.reload();
+       }, 1500);
+      },
+      error: function (callback) {
+       console.log("error", callback);
+       const { responseJSON } = callback;
+       const { errors, message, messages, datas } = responseJSON;
+       let errorInfo, validator;
+       if (datas) {
+        const { errorInfo: errInfo, validator: validCallback } = datas;
+        errorInfo = errInfo;
+        validator = validCallback;
+       }
+       if (message || messages || errorInfo || validator) {
+        const tmpMsg = validator ? "input data tidak sesuai atau tidak boleh kosong" : errorInfo ? errorInfo[2] : messages ? messages : message;
+        toastr.error(tmpMsg, "Kesalahan!");
+       }
+       $("#loadingAjax").hide();
+      },
+     });
+    }
+   });
   });
  });
 
@@ -84,7 +138,7 @@
       withCredentials: true,
      },
      success: function (callback) {
-      const { message, token } = callback;
+      const { message } = callback;
       console.log("success", callback);
       toastr.success(message, "Success!");
 

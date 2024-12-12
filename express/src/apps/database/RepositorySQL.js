@@ -57,7 +57,7 @@ class RepositoryService {
     if (rows.length) {
      return rows;
     } else {
-     return `Tidak ada data tersimpan`;
+     return rows;
     }
    });
 
