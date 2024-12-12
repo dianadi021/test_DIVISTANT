@@ -11,15 +11,15 @@ class AuthInterfaces {
 
   router.post("/login", async (req, res, next) => {
    try {
-    const [isValid, Callback] = await this._Service
+    const [message, token] = await this._Service
      .LoginAccount(req, res, next)
-     .then((result) => [true, result])
+     .then((result) => result)
      .catch((err) => [false, err]);
 
-    if (isValid) {
-     return res.status(ResponseCode.OKE).json({ status: true, message: Callback });
+    if (message) {
+     return res.status(ResponseCode.OKE).json({ status: true, message: message, token: token });
     } else {
-     throw new Error(`${Callback}`);
+     throw new Error(`${token}`);
     }
    } catch (err) {
     return res.status(ResponseCode.SERVER_ERROR).json({ status: ResponseCode.SERVER_ERROR, message: `URL Endpoint Method catch ${err}` });

@@ -23,7 +23,7 @@ class AuthService {
    if ($sessDatas.rows.length !== 1) {
     const token = jwt.sign({ email: user.email, username: user.username }, APP_SECRET, { expiresIn: "1d" });
     await $conn.query("INSERT INTO user_session_jwt (id_user, jwt) VALUES ($1, $2)", [user.id, token]);
-    resolve("Success Login");
+    resolve(["Success Login", token]);
    } else {
     reject(`Failure Login`);
    }

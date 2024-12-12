@@ -38,10 +38,9 @@ class ServiceInterfaces {
 					if (typeof Callback === "string" || !Callback.length) {
 						throw new Error(Callback);
 					}
-
-					if (typeof Callback === "object" || Callback.length) {
-						const [msg, format] = Callback;
-						return res.status(ResponseCode.NOT_FOUND).json({ status: ResponseCode.NOT_FOUND, message: `Gagal memproses ${msg}`, format });
+					
+					if (typeof Callback === "object") {
+						return res.status(ResponseCode.NOT_FOUND).json({ status: ResponseCode.NOT_FOUND, message: `Gagal memproses ${Callback}` });
 					}
 				}
 

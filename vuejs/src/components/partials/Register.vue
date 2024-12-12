@@ -1,10 +1,73 @@
-<script setup></script>
+<script setup>
+ const $base_url = `http://localhost:9000`;
+ function sendRegister() {
+  event.preventDefault();
+  Swal.fire({
+   title: "Apakah kamu yakin ingin melanjutkan?",
+   // text: "You won't be able to revert this!",
+   icon: "warning",
+   showCancelButton: true,
+   confirmButtonColor: "#3085d6",
+   cancelButtonColor: "#d33",
+   cancelButtonText: "Batal",
+   confirmButtonText: "Oke!",
+  }).then((result) => {
+   if (result.isConfirmed) {
+    toastr.warning("Sedang diproses, mohon tunggu!", "Peringatan!");
+
+    $("#btnRegister").hide();
+    $("#loadingAjax").show();
+
+    $.ajax({
+     url: `${$base_url}/api/users/control/create`,
+     type: "POST",
+     dataType: "json",
+     data: $("#formRegister").serializeArray(),
+     xhrFields: {
+      withCredentials: true,
+     },
+     success: function (callback) {
+      const { message } = callback;
+      console.log("success", callback);
+      toastr.success(message, "Success!");
+
+      $("#btnRegister").show();
+
+      setTimeout(function () {
+       window.location.replace("/dashboard");
+      }, 1500);
+     },
+     error: function (callback) {
+      const { responseJSON } = callback;
+      const { errors, message, messages, datas } = responseJSON;
+      let errorInfo, validator;
+      if (datas) {
+       const { errorInfo: errInfo, validator: validCallback } = datas;
+       errorInfo = errInfo;
+       validator = validCallback;
+      }
+      console.log("error", callback);
+      if (message || messages || errorInfo || validator) {
+       const tmpMsg = validator ? "input data tidak sesuai atau tidak boleh kosong" : errorInfo ? errorInfo[2] : messages ? messages : message;
+       toastr.error(tmpMsg, "Kesalahan!");
+      }
+      $("#btnRegister").show();
+      $("#loadingAjax").hide();
+     },
+    });
+    $("#btnRegister").show();
+   }
+  });
+ }
+</script>
 
 <template>
  <div class="bg-gray-100 flex justify-center items-center h-screen">
   <div class="bg-white w-full max-w-sm p-6 rounded-lg shadow-lg">
    <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
-   <form id="formRegister">
+   <form
+    id="formRegister"
+    @submit.prevent="sendRegister()">
     <div class="mb-4">
      <label
       for="username"
@@ -48,6 +111,7 @@
       required />
     </div>
     <button
+     id="btnRegister"
      type="submit"
      class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300">
      Register

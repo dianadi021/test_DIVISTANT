@@ -25,29 +25,24 @@ class RepositoryService {
  }
 
  async Create($datas) {
-  try {
+  return new Promise(async (resolve, reject) => {
    const $values = this.model.map((_, $key) => `$${++$key}`);
-
    const $query = `INSERT INTO ${this.name} (${this.model}) VALUES (${$values})`;
-   const callback = await $conn
+
+   await $conn
     .query($query, Object.values($datas))
     .then(($callback) => {
      const { rowCount } = $callback;
      if (!rowCount) {
-      return $callback;
+      reject($err);
      } else {
-      return `Berhasil menyimpan data`;
+      resolve(`Berhasil menyimpan data`);
      }
     })
     .catch(($err) => {
-     console.error($err);
-     return $err;
+     reject($err);
     });
-
-   return callback;
-  } catch ($err) {
-   return `Kesalahan insert data ${$err}`;
-  }
+  });
  }
 
  async Find() {
@@ -76,7 +71,7 @@ class RepositoryService {
 
  async FindById(id) {
   try {
-   const $query = `SELECT * FROM ${this.name} WHERE id = ${id}`;   
+   const $query = `SELECT * FROM ${this.name} WHERE id = ${id}`;
    if (this.redisTempDatas.length > 0) {
     let tmpDatas = this.redisTempDatas.filter((list) => list.id == id);
 
