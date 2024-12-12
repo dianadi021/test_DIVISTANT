@@ -37,7 +37,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
             "@php artisan key:generate",
-            "@php artisan migrate:fresh",
+            "@php artisan migrate",
             "npm i"
         ],
         "post-update-cmd": [

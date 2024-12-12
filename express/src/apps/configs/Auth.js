@@ -31,34 +31,6 @@ const CheckAuth = async () => {
  }
 };
 
-if (process.env.DB_CONNECT === "mongodb") {
- module.exports = async () => {
-  try {
-   const customFields = { username: "username", password: "password" };
-   const passStrategy = new LocalStrategy(customFields, CheckAuth);
-
-   passport.use(passStrategy);
-   passport.serializeUser((user, done) => {
-    done(null, user._id);
-   });
-   passport.deserializeUser(async (userID, done) => {
-    const isUserReady = await UsersModel.findById(userID);
-
-    if (!isUserReady) {
-     console.log(`No data about user!`);
-     return done(null, false);
-    }
-
-    return done(null, isUserReady);
-   });
-
-   console.log(`Auth is Ready!`);
-  } catch (err) {
-   console.log(`Passport Auth Strategy Method Catch error: ${err}`);
-  }
- };
-}
-
 if (process.env.DB_CONNECT === "postgre") {
  try {
   const { $conn } = require("../database/Connect.js");

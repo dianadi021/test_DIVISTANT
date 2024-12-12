@@ -25,6 +25,9 @@ Repos ini dibuat sebagai salah satu syarat teknikal tes dari tim DIVISTANT yang 
    pnpm install
    ```
 
+3. **.env (Environment)**
+   - Jangan lupa untuk copy/paste .env.example menjadi .env
+
 ## Running Services @ExpressJS
 
 1. **Menjalankan Server @ExpressJS**:

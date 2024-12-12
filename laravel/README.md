@@ -37,7 +37,7 @@ composer install
 php artisan key:generate
 ```
 ```bash
-php artisan migrate:fresh
+php artisan migrate
 ```
 > TailwindCSS Installation
 ```bash
@@ -48,14 +48,6 @@ pnpm install
 npm install
 ```
 > Setup .env
-```bash
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=
-DB_USERNAME=
-DB_PASSWORD=
-```
 ```bash
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1

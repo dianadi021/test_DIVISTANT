@@ -11,33 +11,7 @@ module.exports = async (app, express) => {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-
-  if (process.env.DB_CONNECT === "mongodb") {
-   var passport = require("passport");
-   var MongoStore = require("connect-mongo");
-   var { DB_CONNECTIONS, DB_SERVER, APP_HOST, APP_URL, mongoose } = require("../database/Connect.js");
-   const sessionStore = new MongoStore({ mongoUrl: DB_SERVER, collectionName: "sessions" });
-
-   app.use(
-    session({
-     secret: `${APP_SECRET}`,
-     resave: false,
-     saveUninitialized: false,
-     store: sessionStore,
-     cookie: {
-      // 1Day
-      maxAge: 1000 * 60 * 60 * 24,
-     },
-    })
-   );
-
-   // PASSPORT SECTIONS START
-   app.use(passport.authenticate("session"));
-
-   // Not Fixed Users Model;
-   await require("./Auth.js");
-  }
-
+  
   if (process.env.DB_CONNECT === "postgre") {
    var passport = require("./Auth.js");
    var PgStore = require("connect-pg-simple")(session);
