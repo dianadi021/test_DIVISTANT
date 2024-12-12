@@ -47,10 +47,13 @@ class Auth {
  // JWT Auth
  MiddlewereCheckToken(req, res, next) {
   try {
-   const { token } = SetRequest(req) ? SetRequest(req) : SetParams(req);
+   const userAgent = req.get("User-Agent");
+   const { token } = SetParams(req) ? SetParams(req) : SetRequest(req);
 
-   const [_, validToken] = !token ? req.headers.authorization.split(" ") : ["Bearer", token];
-   const tmpToken = validToken ? validToken : token;
+   if (userAgent.includes("PostmanRuntime")) {
+    var [_, validToken] = !token ? req.headers.authorization.split(" ") : ["Bearer", token];
+   }
+   const tmpToken = userAgent.includes("Mozilla") ? token : validToken;
 
    const APP_SECRET = "secret-dianadi021";
    const jwt = require("jsonwebtoken");

@@ -177,7 +177,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"username\",\r\n    \"email\": \"email\",\r\n    \"password\": \"1234\"\r\n}",
+							"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6ImFzZEBhc2QiLCJ1c2VybmFtZSI6ImFzZCIsImlhdCI6MTczNDAxNDQzNCwiZXhwIjoxNzM0MTAwODM0fQ.7yJed8pvU6L0KpIj7vb69qjJp_Wij8f2fS3JEocuOLo\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -292,7 +292,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"username\",\r\n    \"password\": \"1234\"\r\n}",
+					"raw": "{\r\n    \"username\": \"asd\",\r\n    \"password\": \"asd\",\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzZEBhc2QiLCJ1c2VybmFtZSI6ImFzZCIsImlhdCI6MTczNDAwMjA4OSwiZXhwIjoxNzM0MDg4NDg5fQ.rUsY4z8JwWyXPnCbDISpmjVKMBzu40oshY4l5xtXY5I\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -51,7 +51,7 @@ class RepositoryService {
     return this.redisTempDatas;
    }
 
-   const $query = `SELECT ${this.model} FROM ${this.name}`;
+   const $query = `SELECT * FROM ${this.name}`;
    const callback = await $conn.query($query).then(($callback) => {
     const { rows } = $callback;
     if (rows.length) {
