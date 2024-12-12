@@ -33,9 +33,45 @@
 
       $("#btnRegister").show();
 
-      setTimeout(function () {
-       window.location.replace("/dashboard");
-      }, 1500);
+      $.ajax({
+       url: `${$base_url}/api/login`,
+       type: "POST",
+       dataType: "json",
+       data: $("#formRegister").serializeArray(),
+       xhrFields: {
+        withCredentials: true,
+       },
+       success: function (callback) {
+        const { message, token } = callback;
+        console.log("success", callback);
+        toastr.success(message, "Success!");
+
+        localStorage.setItem("login_token", token);
+
+        $("#btnLogin").show();
+
+        setTimeout(function () {
+         window.location.replace("/dashboard");
+        }, 1500);
+       },
+       error: function (callback) {
+        console.log("error", callback);
+        const { responseJSON } = callback;
+        const { errors, message, messages, datas } = responseJSON;
+        let errorInfo, validator;
+        if (datas) {
+         const { errorInfo: errInfo, validator: validCallback } = datas;
+         errorInfo = errInfo;
+         validator = validCallback;
+        }
+        if (message || messages || errorInfo || validator) {
+         const tmpMsg = validator ? "input data tidak sesuai atau tidak boleh kosong" : errorInfo ? errorInfo[2] : messages ? messages : message;
+         toastr.error(tmpMsg, "Kesalahan!");
+        }
+        $("#btnLogin").show();
+        $("#loadingAjax").hide();
+       },
+      });
      },
      error: function (callback) {
       const { responseJSON } = callback;

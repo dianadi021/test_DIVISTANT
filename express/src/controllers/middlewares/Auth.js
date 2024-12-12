@@ -52,7 +52,7 @@ class Auth {
    const [_, validToken] = !token ? req.headers.authorization.split(" ") : ["Bearer", token];
    const tmpToken = validToken ? validToken : token;
 
-   const APP_SECRET = process.env.SESSIONS_SECRET || "secret-dianadi021";
+   const APP_SECRET = "secret-dianadi021";
    const jwt = require("jsonwebtoken");
    const status = jwt.verify(tmpToken, APP_SECRET);
 

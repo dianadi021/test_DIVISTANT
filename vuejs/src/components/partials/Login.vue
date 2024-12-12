@@ -35,9 +35,9 @@
 
       $("#btnLogin").show();
 
-      //   setTimeout(function () {
-      //    window.location.replace("/dashboard");
-      //   }, 1500);
+        setTimeout(function () {
+         window.location.replace("/dashboard");
+        }, 1500);
      },
      error: function (callback) {
       console.log("error", callback);

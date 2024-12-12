@@ -1,12 +1,12 @@
 <script setup>
- $("#main_title").html("Welcome");
-
  import { RouterLink, RouterView } from "vue-router";
 
  import Login from "../components/partials/Login.vue";
  import Register from "../components/partials/Register.vue";
 
  $(document).ready(function () {
+  $("#main_title").html("Welcome");
+
   $("#register_section").hide();
 
   $("#btnOpnLogin").click(function () {
