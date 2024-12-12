@@ -32,18 +32,17 @@ class AuthInterfaces {
      .LogoutAccount(req, res, next)
      .then((result) => [true, result])
      .catch((err) => [false, err]);
-     console.log(callback);
-     
-     
+    console.log(callback);
+
     if (isValid) {
      return res.status(ResponseCode.OKE).json({ status: true, message: "Berhasil logout" });
     } else {
-     throw new Error((callback ? callback : `Tidak ada session user`));
+     throw new Error(callback ? callback : `Tidak ada session user`);
     }
    } catch (err) {
     return res.status(ResponseCode.SERVER_ERROR).json({ status: ResponseCode.SERVER_ERROR, message: `URL Endpoint Method catch ${err}` });
    }
-  });  
+  });
 
   return router;
  }

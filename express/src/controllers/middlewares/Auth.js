@@ -45,6 +45,37 @@ class Auth {
  }
 
  // JWT Auth
+ MiddlewereCheckToken(req, res, next) {
+  try {
+   const { token } = SetRequest(req) ? SetRequest(req) : SetParams(req);
+
+   const [_, validToken] = !token ? req.headers.authorization.split(" ") : ["Bearer", token];
+   const tmpToken = validToken ? validToken : token;
+
+   const APP_SECRET = process.env.SESSIONS_SECRET || "secret-dianadi021";
+   const jwt = require("jsonwebtoken");
+   const status = jwt.verify(tmpToken, APP_SECRET);
+
+   if (status) {
+    next();
+   } else {
+    throw new Error(status);
+   }
+  } catch (err) {
+   const { name } = err;
+
+   if (name == "JsonWebTokenError") {
+    return res.status(ResponseCode.NOT_FOUND).json({ status: false, messages: `Token Tidak Benar/Invalid Token catch error: ${err}` });
+   } else if (name == "TokenExpiredError") {
+    return res.status(ResponseCode.SERVER_TIMEOUT).json({ status: false, messages: `Token Kadaluarsa/Expird catch error: ${err}` });
+   } else if (name == "TypeError") {
+    return res.status(ResponseCode.SERVER_ERROR).json({ status: false, messages: `Token tidak sesuai! catch error: ${err}` });
+   } else {
+    return res.status(ResponseCode.SERVER_ERROR).json({ status: false, messages: `Function Checking Token catch error: ${err}` });
+   }
+  }
+ }
+
  CheckTokenJWT(req, res, next) {
   try {
    const { token } = SetRequest(req) ? SetRequest(req) : SetParams(req);
@@ -54,7 +85,6 @@ class Auth {
 
    const APP_SECRET = process.env.SESSIONS_SECRET || "secret-dianadi021";
    const jwt = require("jsonwebtoken");
-   const status = jwt.verify(tmpToken, APP_SECRET)
    return jwt.verify(tmpToken, APP_SECRET);
   } catch (err) {
    const { name } = err;

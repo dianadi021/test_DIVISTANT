@@ -31,15 +31,16 @@
       console.log("success", callback);
       toastr.success(message, "Success!");
 
-      localStorage.setItem("login_token", token)
+      localStorage.setItem("login_token", token);
 
       $("#btnLogin").show();
 
-    //   setTimeout(function () {
-    //    window.location.replace("/dashboard");
-    //   }, 1500);
+      //   setTimeout(function () {
+      //    window.location.replace("/dashboard");
+      //   }, 1500);
      },
      error: function (callback) {
+      console.log("error", callback);
       const { responseJSON } = callback;
       const { errors, message, messages, datas } = responseJSON;
       let errorInfo, validator;
@@ -48,7 +49,6 @@
        errorInfo = errInfo;
        validator = validCallback;
       }
-      console.log("error", callback);
       if (message || messages || errorInfo || validator) {
        const tmpMsg = validator ? "input data tidak sesuai atau tidak boleh kosong" : errorInfo ? errorInfo[2] : messages ? messages : message;
        toastr.error(tmpMsg, "Kesalahan!");
