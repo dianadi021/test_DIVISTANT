@@ -2,35 +2,6 @@ const Bcrypt = require("bcrypt");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
-const CheckAuth = async () => {
- try {
-  const localStrategy = new LocalStrategy(async (username, password, done) => {
-   console.log(`Ready to verify login user!`);
-   const isUserReady = await UsersModel.findOne({ username: username.toLowerCase() });
-
-   if (!isUserReady) {
-    console.log(`No data about user!`);
-    return done(null, false);
-   }
-
-   const isValid = await Bcrypt.compare(ConvertPasswordToHash(password), isUserReady.password);
-   console.log(isValid);
-
-   if (!isValid) {
-    console.log(`User login failed!`);
-    return done(null, false);
-   }
-
-   console.log(`User login success!`);
-   return done(null, isUserReady);
-  });
-
-  passport.use(localStrategy);
- } catch (err) {
-  console.log(`Passport Strategy Method Catch error: ${err}`);
- }
-};
-
 if (process.env.DB_CONNECT === "postgre") {
  try {
   const { $conn } = require("../database/Connect.js");
@@ -53,7 +24,7 @@ if (process.env.DB_CONNECT === "postgre") {
   passport.use(localStrategy);
 
   // Serialize user (disimpan dalam session)
-  passport.serializeUser((user, done) => {
+  passport.serializeUser(async (user, done) => {
    done(null, user.id);
   });
 
@@ -62,6 +33,7 @@ if (process.env.DB_CONNECT === "postgre") {
    try {
     const res = await $conn.query("select usr.id, usr.username, usr.email, usr.password from users usr where usr.id = $1", [id]);
     const user = res.rows[0];
+    
     done(null, user);
    } catch (err) {
     done(err);

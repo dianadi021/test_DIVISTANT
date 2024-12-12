@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_session_express', function (Blueprint $table) {
-            $table->string('sid')->primary();
-            $table->longText('sess');
-            $table->timestamp('expire');
+        Schema::create('user_session_jwt', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('id_user')->unique();
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->string('jwt');
         });
     }
 
@@ -23,7 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_session_express');
+        Schema::dropIfExists('user_session_jwt');
     }
 };
 

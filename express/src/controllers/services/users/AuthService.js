@@ -1,36 +1,55 @@
-const ResponseCode = require("../../../apps/configs/ResponseCode.js");
+const Validator = require("../../../tools/Validator.js");
+const { IsSet, SetRequest, SetParams, IsValidRequest, SetObject } = new Validator();
 
-const isAuthenticated = (req, res, next) => {
- return new Promise(async (resolve, reject) => {
-  if (req.isAuthenticated()) {
-   return resolve(next());
-  }
-  return res.status(ResponseCode.UNAUTHORIZED).json({ status: ResponseCode.UNAUTHORIZED, message: `Unauthorized` });
- });
-};
+const { $conn } = require("../../../apps/database/Connect.js");
+
+const Auth = require("../../middlewares/Auth.js");
+const { CheckTokenJWT } = new Auth();
 
 class AuthService {
- async LoginAccount(req, res) {
+ async LoginAccount(req, res, next) {
   return new Promise(async (resolve, reject) => {
-   if (await req.isAuthenticated()) {
-    return resolve(`Success Login`);
+   const { username } = SetRequest(req) ? SetRequest(req) : SetParams(req);
+   const res = await $conn.query("SELECT id, username, email, password FROM users WHERE username = $1", [username]);
+   const user = res.rows[0];
+   if (!user) {
+    return reject("User not found");
+   }
+
+   const jwt = require("jsonwebtoken");
+   const APP_SECRET = process.env.SESSIONS_SECRET || "secret-dianadi021";
+
+   const $sessDatas = await $conn.query("SELECT * FROM user_session_jwt WHERE id_user = $1", [user.id]);
+   if ($sessDatas.rows.length !== 1) {
+    const token = jwt.sign({ email: user.email, username: user.username }, APP_SECRET, { expiresIn: "1d" });
+    await $conn.query("INSERT INTO user_session_jwt (id_user, jwt) VALUES ($1, $2)", [user.id, token]);
+    resolve("Success Login");
    } else {
-    return reject(`Failure Login`);
+    reject(`Failure Login`);
    }
   });
  }
 
- async LogoutAccount(req, res) {
-  try {
-   req.logout((err) => {
-    if (err) return next(err);
-   });
-  } catch (error) {
-   return error;
-  }
- }
+ async LogoutAccount(req, res, next) {
+  return new Promise(async (resolve, reject) => {
+   if (CheckTokenJWT(req, res, next)) {
+    const { username } = SetRequest(req) ? SetRequest(req) : SetParams(req);
+    const res = await $conn.query("SELECT id, username, email, password FROM users WHERE username = $1", [username]);
+    const user = res.rows[0];
+    if (!user) {
+     return reject("User not found");
+    }
 
- isAuthenticated = isAuthenticated;
+    const $sessDatas = await $conn.query("SELECT * FROM user_session_jwt WHERE id_user = $1", [user.id]);
+    if ($sessDatas.rows.length === 1) {
+     await $conn.query("DELETE FROM user_session_jwt WHERE ID_USER = $1", [user.id]);
+     resolve("Success logout");
+    } else {
+     reject(`Failure logout`);
+    }
+   }
+  });
+ }
 }
 
 module.exports = AuthService;
