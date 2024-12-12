@@ -29,14 +29,20 @@ class RepositoryService {
    const $values = this.model.map((_, $key) => `$${++$key}`);
 
    const $query = `INSERT INTO ${this.name} (${this.model}) VALUES (${$values})`;
-   const callback = await $conn.query($query, Object.values($datas)).then(($callback) => {
-    const { rowCount } = $callback;
-    if (!rowCount) {
-     return $callback;
-    } else {
-     return `Berhasil menyimpan data`;
-    }
-   });
+   const callback = await $conn
+    .query($query, Object.values($datas))
+    .then(($callback) => {
+     const { rowCount } = $callback;
+     if (!rowCount) {
+      return $callback;
+     } else {
+      return `Berhasil menyimpan data`;
+     }
+    })
+    .catch(($err) => {
+     console.error($err);
+     return $err;
+    });
 
    return callback;
   } catch ($err) {
@@ -102,17 +108,51 @@ class RepositoryService {
  }
 
  async FindByFilter(filter) {
-  const { page, document } = filter;
+  try {
+   const $query = `SELECT ${this.model} FROM ${this.name} WHERE ${filter}`;
+   console.log($query);
 
-  if (page && document) {
-   return await this.model.aggregate([{ $match: filter }, { $skip: (parseInt(page) - 1) * parseInt(document) }, { $limit: parseInt(document) }]);
+   const callback = await $conn.query($query).then(($callback) => {
+    const { rows } = $callback;
+    if (rows.length) {
+     return rows;
+    } else {
+     return `Tidak ada data tersimpan`;
+    }
+   });
+
+   return callback;
+  } catch ($err) {
+   return `Kesalahan mengambil data data ${$err}`;
   }
-
-  return await this.model.findOne(filter).exec();
  }
 
  async FindByIdAndUpdate(id, data) {
-  return await this.model.findByIdAndUpdate(id, data).exec();
+  try {
+   const $keys = Object.keys(data);
+   Object.values(data).forEach((list, index) => {
+    $keys[index] += ` = '${list}'`;
+   });
+
+   const $query = `UPDATE ${this.name} SET ${$keys} WHERE ID = ${id}`;
+   const callback = await $conn
+    .query($query)
+    .then(($callback) => {
+     const { rowCount } = $callback;
+     if (!rowCount) {
+      return $callback;
+     } else {
+      return `Berhasil menyimpan data`;
+     }
+    })
+    .catch(($err) => {
+     return $err;
+    });
+
+   return callback;
+  } catch ($err) {
+   return `Kesalahan update data ${$err}`;
+  }
  }
 
  async FindOneAndUpdate(req, data) {
@@ -121,7 +161,26 @@ class RepositoryService {
  }
 
  async FindByIdAndRemove(id) {
-  return await this.model.findByIdAndRemove(id).exec();
+  try {
+   const $query = `DELETE FROM ${this.name} WHERE ID = ${id}`;
+   const callback = await $conn
+    .query($query)
+    .then(($callback) => {
+     const { rowCount } = $callback;
+     if (!rowCount) {
+      return $callback;
+     } else {
+      return `Berhasil menghapus data`;
+     }
+    })
+    .catch(($err) => {
+     return $err;
+    });
+
+   return callback;
+  } catch ($err) {
+   return `Kesalahan delete data ${$err}`;
+  }
  }
 
  async FindOneAndRemove(req) {

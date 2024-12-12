@@ -140,7 +140,7 @@ class ServiceInterfaces {
 				const [isValid, Callback] = await this._Service
 					.UpdateDataByID(req, res)
 					.then((result) => [true, result])
-					.catch((err) => [false, err]);
+					.catch((err) => [false, err]);					
 
 				if (!isValid) {
 					if (typeof Callback === "string" || !Callback.length) {
@@ -154,6 +154,8 @@ class ServiceInterfaces {
 				}
 
 				if (typeof Callback == "string") {
+					return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: Callback });
+				} else if (typeof Callback == "object") {
 					return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: Callback });
 				}
 				return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: "Tidak ada data." });
@@ -181,6 +183,8 @@ class ServiceInterfaces {
 				}
 
 				if (typeof Callback == "string") {
+					return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: Callback });
+				} else if (typeof Callback == "object") {
 					return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: Callback });
 				}
 				return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: "Tidak ada data." });
@@ -263,6 +267,8 @@ class ServiceInterfaces {
 
 				if (typeof Callback == "string") {
 					return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: Callback });
+				} else if (typeof Callback == "object") {
+					return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: Callback });
 				}
 				return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: "Tidak ada data." });
 			} catch (err) {
@@ -289,6 +295,8 @@ class ServiceInterfaces {
 				}
 
 				if (typeof Callback == "string") {
+					return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: Callback });
+				} else if (typeof Callback == "object") {
 					return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: Callback });
 				}
 				return res.status(ResponseCode.OKE).json({ status: ResponseCode.OKE, message: "Tidak ada data." });

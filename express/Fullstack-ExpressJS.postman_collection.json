@@ -24,7 +24,7 @@
 								}
 							}
 						},
-						"url": "{{url}}:{{port}}/{{api_path}}/users/{{logs_path}}/create"
+						"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/{{logs_path}}/create"
 					},
 					"response": []
 				},
@@ -45,7 +45,45 @@
 								}
 							}
 						},
-						"url": "{{url}}:{{port}}/{{api_path}}/users/all"
+						"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/all"
+					},
+					"response": []
+				},
+				{
+					"name": "filter",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/filter?id=1",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api_path}}",
+								"{{users_path}}",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
 					},
 					"response": []
 				},
@@ -66,11 +104,47 @@
 								}
 							}
 						},
-						"url": "{{url}}:{{port}}/{{api_path}}/users/details/1"
+						"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/details/1"
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "updateByID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"username\",\r\n    \"email\": \"email\",\r\n    \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/{{logs_path}}/update/1"
+			},
+			"response": []
+		},
+		{
+			"name": "deleteByID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/{{logs_path}}/delete/1"
+			},
+			"response": []
 		},
 		{
 			"name": "logout",

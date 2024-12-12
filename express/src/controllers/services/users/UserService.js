@@ -7,10 +7,10 @@ const { GetDataFormat } = new User();
 const { IsSet, SetRequest, SetParams, IsValidRequest, SetObject } = new Validator();
 
 const $checkingUsers = async (req, repoData) => {
- const { id, name, level, isForceUpdate } = SetRequest(req) ? SetRequest(req) : SetParams(req);
+ const { id, username, email, isForceUpdate } = SetRequest(req) ? SetRequest(req) : SetParams(req);
 
- let isDataUsed = repoData.filter((list) => list.name == name);
- isDataUsed = !isDataUsed.length && level ? repoData.filter((list) => list.level == level) : isDataUsed;
+ let isDataUsed = repoData.filter((list) => list.username == username);
+ isDataUsed = !isDataUsed.length && email ? repoData.filter((list) => list.email == email) : isDataUsed;
  isDataUsed = !isDataUsed.length && id ? repoData.filter((list) => list._id == id) : isDataUsed;
 
  if (!isDataUsed.length) return false;
@@ -20,7 +20,7 @@ const $checkingUsers = async (req, repoData) => {
 
 const $getDataByID = async (req, repo) => {
  return new Promise(async (resolve, reject) => {
-  const { id } = SetParams(req);
+  const { id } = SetParams(req) ? SetParams(req) : SetRequest(req);
 
   if (!IsSet(id)) {
    return reject(`Format tidak sesuai atau input value kosong!`);
@@ -35,15 +35,29 @@ const $getDataByID = async (req, repo) => {
 
 const $getDataByFilter = async (req, repo) => {
  return new Promise(async (resolve, reject) => {
-  const validQuery = ["name", "level", "page", "document"];
+  let qryFilter = ``;
   const filter = SetParams(req) ? SetParams(req) : SetRequest(req);
 
+  const validQuery = ["id", "username", "email", "page", "document"];
   if (!IsValidRequest(validQuery, filter).length) {
    return reject(`Terdapat properti query filter yang tidak sesuai`);
   }
 
+  const $keys = Object.keys(filter);
+  Object.values(filter).forEach((list, index) => {
+   $keys[index] += ` = '${list}'`;
+  });
+
+  $keys.forEach((list, index) => {
+   if (index !== 0) {
+    qryFilter += ` AND ${list} `;
+   } else {
+    qryFilter += ` ${list} `;
+   }
+  });
+
   return await repo
-   .FindByFilter(filter)
+   .FindByFilter(qryFilter)
    .then((result) => resolve(result))
    .catch((err) => reject(err));
  });
@@ -82,7 +96,7 @@ class UserService {
 
  async GetDatas(req, res) {
   return new Promise(async (resolve, reject) => {
-   return await this._Repository
+   await this._Repository
     .Find()
     .then((result) => resolve(result))
     .catch((err) => reject(err));
@@ -91,7 +105,7 @@ class UserService {
 
  async GetDataByID(req, res) {
   return new Promise(async (resolve, reject) => {
-   return await $getDataByID(req, this._Repository)
+   await $getDataByID(req, this._Repository)
     .then((result) => resolve(result))
     .catch((err) => reject(err));
   });
@@ -99,7 +113,7 @@ class UserService {
 
  async GetDataByFilter(req, res) {
   return new Promise(async (resolve, reject) => {
-   return await $getDataByFilter(req, this._Repository)
+   await $getDataByFilter(req, this._Repository)
     .then((result) => resolve(result))
     .catch((err) => reject(err));
   });
@@ -107,32 +121,31 @@ class UserService {
 
  async UpdateDataByID(req, res) {
   return new Promise(async (resolve, reject) => {
-   const { id } = SetParams(req);
+   const datas = await $getDataByID(req, this._Repository);
 
-   if (!IsSet(id)) {
-    return reject([`ID kosong.`]);
+   if (!datas.length) {
+    return reject(`Data tersebut tidak ada!`);
    }
 
-   if (!(await $getDataByID(req, this._Repository))) {
-    return reject(`Tidak ada role dengan ID tersebut!`);
+   const { username, email, password } = SetRequest(req);
+   if (!IsSet(username) || !IsSet(email) || !IsSet(password)) {
+    return reject([`Format tidak sesuai atau input value kosong!`, GetDataFormat()]);
    }
 
-   const { name, level, description } = SetRequest(req);
-
-   if (!IsSet(name) || !IsSet(level)) {
-    return reject([`Format tidak sesuai atau input value kosong!`, GetDataFormat]);
-   }
-
-   const roleDatas = await this._Repository.GetTempDatas();
-   if (await $checkingUsers(req, roleDatas)) {
-    return reject(`Nama atau Level Role sudah terpakai`);
-   }
-
-   const newData = new Role(name, level, description);
+   const tmpPass = await Bcrypt.hash(password, 12);
+   const newData = new User(username, email, tmpPass);
 
    return await this._Repository
-    .FindByIdAndUpdate(id, newData)
-    .then((_) => resolve(`Berhasil mengubah data`))
+    .FindByIdAndUpdate(datas[0].id, newData)
+    .then(($callback) => {
+     const { name } = $callback;
+
+     if (name === "error") {
+      resolve($callback);
+     } else {
+      resolve(`Berhasil mengubah data`);
+     }
+    })
     .catch((err) => reject(err));
   });
  }
@@ -167,20 +180,25 @@ class UserService {
 
  async DeleteDataByID(req, res) {
   return new Promise(async (resolve, reject) => {
-   const { id } = SetParams(req);
+   const datas = await $getDataByID(req, this._Repository);
+   console.log(datas);
+   
 
-   if (!IsSet(id)) {
-    return reject([`ID kosong.`]);
-   }
-
-   const roleDatas = await this._Repository.GetTempDatas();
-   if (!(await $checkingUsers({ id }, roleDatas))) {
-    return reject(`Tidak ada role dengan ID tersebut!`);
+   if (typeof datas === "string") {
+    return reject(datas);
    }
 
    return await this._Repository
-    .FindByIdAndRemove(id)
-    .then((_) => resolve(`Berhasil menghapus data`))
+    .FindByIdAndRemove(datas[0].id)
+    .then(($callback) => {
+     const { name } = $callback;
+
+     if (name === "error") {
+      resolve($callback);
+     } else {
+      resolve(`Berhasil menghapus data`);
+     }
+    })
     .catch((err) => reject(err));
   });
  }
