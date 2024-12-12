@@ -107,44 +107,183 @@
 						"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/details/1"
 					},
 					"response": []
+				},
+				{
+					"name": "updateByID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"manusia setengah salmon\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/{{logs_path}}/update/3"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteByID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/{{logs_path}}/delete/2"
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "updateByID",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"username\",\r\n    \"email\": \"email\",\r\n    \"password\": \"1234\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+			"name": "Books",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"koala kumal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}:{{port}}/{{api_path}}/{{books_path}}/{{logs_path}}/create"
+					},
+					"response": []
 				},
-				"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/{{logs_path}}/update/1"
-			},
-			"response": []
-		},
-		{
-			"name": "deleteByID",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+				{
+					"name": "all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"username\",\r\n    \"email\": \"email\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}:{{port}}/{{api_path}}/{{books_path}}/all"
+					},
+					"response": []
 				},
-				"url": "{{url}}:{{port}}/{{api_path}}/{{users_path}}/{{logs_path}}/delete/1"
-			},
-			"response": []
+				{
+					"name": "filter",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:{{port}}/{{api_path}}/{{books_path}}/filter?id=1",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api_path}}",
+								"{{books_path}}",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"username\",\r\n    \"email\": \"email\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}:{{port}}/{{api_path}}/{{books_path}}/details/3"
+					},
+					"response": []
+				},
+				{
+					"name": "updateByID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"manusia setengah salmon\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}:{{port}}/{{api_path}}/{{books_path}}/{{logs_path}}/update/3"
+					},
+					"response": []
+				},
+				{
+					"name": "deleteByID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}:{{port}}/{{api_path}}/{{books_path}}/{{logs_path}}/delete/2"
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "logout",

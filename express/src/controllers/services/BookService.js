@@ -1,16 +1,15 @@
 const Bcrypt = require("bcrypt");
-const Validator = require("../../../tools/Validator.js");
-const RepositorySQL = require("../../../apps/database/RepositorySQL.js");
-const User = require("../../../apps/models/users/UserModel.js");
+const Validator = require("../../tools/Validator.js");
+const RepositorySQL = require("../../apps/database/RepositorySQL.js");
+const Book = require("../../apps/models/BookModel.js");
 
-const { GetDataFormat } = new User();
+const { GetDataFormat } = new Book();
 const { IsSet, SetRequest, SetParams, IsValidRequest, SetObject } = new Validator();
 
-const $checkingUsers = async (req, repoData) => {
- const { id, username, email, isForceUpdate } = SetRequest(req) ? SetRequest(req) : SetParams(req);
+const $checkingBooks = async (req, repoData) => {
+ const { id, title, isForceUpdate } = SetRequest(req) ? SetRequest(req) : SetParams(req);
 
- let isDataUsed = repoData.filter((list) => list.username == username);
- isDataUsed = !isDataUsed.length && email ? repoData.filter((list) => list.email == email) : isDataUsed;
+ let isDataUsed = repoData.filter((list) => list.title == title);
  isDataUsed = !isDataUsed.length && id ? repoData.filter((list) => list.id == id) : isDataUsed;
 
  if (!isDataUsed.length) return false;
@@ -38,7 +37,7 @@ const $getDataByFilter = async (req, repo) => {
   let qryFilter = ``;
   const filter = SetParams(req) ? SetParams(req) : SetRequest(req);
 
-  const validQuery = ["id", "username", "email", "page", "document"];
+  const validQuery = ["id", "title", "page", "document"];
   if (!IsValidRequest(validQuery, filter).length) {
    return reject(`Terdapat properti query filter yang tidak sesuai`);
   }
@@ -65,7 +64,7 @@ const $getDataByFilter = async (req, repo) => {
 
 class UserService {
  constructor() {
-  this._Repository = new RepositorySQL(["username", "email", "password"], "users");
+  this._Repository = new RepositorySQL(["title", "price", "description"], "books");
  }
 
  GetName() {
@@ -78,14 +77,13 @@ class UserService {
 
  async CreateData(req, res) {
   return new Promise(async (resolve, reject) => {
-   const { username, email, password } = SetRequest(req);
+   const { title, price, description } = SetRequest(req);
 
-   if (!IsSet(username) || !IsSet(email) || !IsSet(password)) {
+   if (!IsSet(title)) {
     return reject([`Format tidak sesuai atau input value kosong!`, GetDataFormat()]);
    }
 
-   const tmpPass = await Bcrypt.hash(password, 12);
-   const newData = new User(username, email, tmpPass);
+   const newData = new Book(title, price, description);
 
    await this._Repository
     .Create(newData)
@@ -122,18 +120,19 @@ class UserService {
  async UpdateDataByID(req, res) {
   return new Promise(async (resolve, reject) => {
    const datas = await $getDataByID(req, this._Repository);
+   console.log(datas);
+   
 
    if (typeof datas === "string") {
     return reject(`${datas}`);
    }
 
-   const { username, email, password } = SetRequest(req);
-   if (!IsSet(username) || !IsSet(email) || !IsSet(password)) {
+   const { title, price, description } = SetRequest(req);
+   if (!IsSet(title)) {
     return reject([`Format tidak sesuai atau input value kosong!`, GetDataFormat()]);
    }
 
-   const tmpPass = await Bcrypt.hash(password, 12);
-   const newData = new User(username, email, tmpPass);
+   const newData = new Book(title, price, description);
 
    return await this._Repository
     .FindByIdAndUpdate(datas[0].id, newData)
@@ -165,7 +164,7 @@ class UserService {
    }
 
    const roleDatas = await this._Repository.GetTempDatas();
-   if (await $checkingUsers(req, roleDatas)) {
+   if (await $checkingBooks(req, roleDatas)) {
     return reject(`Nama atau Level Role sudah terpakai`);
    }
 
@@ -182,7 +181,6 @@ class UserService {
   return new Promise(async (resolve, reject) => {
    const datas = await $getDataByID(req, this._Repository);
    console.log(datas);
-   
 
    if (typeof datas === "string") {
     return reject(datas);
@@ -212,7 +210,7 @@ class UserService {
    }
 
    const roleDatas = await this._Repository.GetTempDatas();
-   if (!(await $checkingUsers(req, roleDatas))) {
+   if (!(await $checkingBooks(req, roleDatas))) {
     return reject(`Nama dan Level Role tersebut tidak terdaftar.`);
    }
 

@@ -76,8 +76,8 @@ class RepositoryService {
 
  async FindById(id) {
   try {
-   const $query = `SELECT * FROM ${this.name} WHERE id = ${id}`;
-   if (this.redisTempDatas.length) {
+   const $query = `SELECT * FROM ${this.name} WHERE id = ${id}`;   
+   if (this.redisTempDatas.length > 0) {
     let tmpDatas = this.redisTempDatas.filter((list) => list.id == id);
 
     return tmpDatas.length
