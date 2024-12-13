@@ -19,7 +19,7 @@
             <button class="bg-yellow-500 text-white font-medium px-4 py-2 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300 btn-edit" data-id="${row.id}" data-title="${row.title}">
                 Edit
             </button>
-            <button class="bg-red-500 text-white font-medium px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 btn-delete" data-id="${row.id}" data-title="${row.title}">
+            <button class="bg-red-500 text-white font-medium px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 btn-delete" data-id="${row.id}" data-title="${row.title}" data-description="${row.description}">
                 Delete
             </button>
         </div>
@@ -32,9 +32,10 @@
   })();
 
   $("#content_loader").on("click", ".btn-edit", function () {
-   const idData = $(this).data("id");
-   const titleData = $(this).data("title");
-   alert(`${titleData} - ${idData}`);
+    const idData = $(this).data("id");
+    const titleData = $(this).data("title");
+    const descriptionData = $(this).data("description");
+    openForm("edit", titleData, descriptionData, idData);
   });
 
   $("#content_loader").on("click", ".btn-delete", function () {
@@ -97,9 +98,20 @@
   });
  });
 
+ let localMethodForm = "create"
+ let localidData = null
  let isFormOpen = false;
- function openForm() {
-  $("#formTitle").html("Form Input Buku Baru");
+ function openForm($section = null, titleData = null, description = null, idData = null) {
+    if ($section === "edit") {
+        localidData = idData;
+        localMethodForm = "edit"
+        $("#formTitle").html("Form Edit Buku Baru");
+        $("#title").val(`${titleData}`);
+        $("#description").html(`${(description ? description : "")}`);
+    } else {
+        $("#formTitle").html("Form Input Buku Baru");
+    }
+
   if (!isFormOpen) {
    $("#formSection").show();
    isFormOpen = !isFormOpen;
@@ -128,10 +140,12 @@
     $("#loadingAjax").show();
 
     $("#tokenForm").val(localStorage.getItem("login_token"));
+    const methodUrl = (localMethodForm === "edit" ? `${$base_url}/api/books/control/update/${localidData}` : `${$base_url}/api/books/control/create`)
+    const methodData = (localMethodForm === "edit" ? `PUT` : `POST`)
 
     $.ajax({
-     url: `${$base_url}/api/books/control/create`,
-     type: "POST",
+     url: `${methodUrl  }`,
+     type: `${methodData}`,
      dataType: "json",
      data: $("#formBook").serializeArray(),
      xhrFields: {
@@ -145,7 +159,7 @@
       $("#btnSimpan").show();
 
       setTimeout(function () {
-       window.location.reload();
+    //    window.location.reload();
       }, 1500);
      },
      error: function (callback) {
@@ -174,12 +188,13 @@
 
 <template>
  <div class="w-full flex flex-wrap">
-  <div>
+  <div class="flex gap-10">
    <button
     @click="openForm()"
     class="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300">
     Tambah
    </button>
+   <a href="/logout" class="bg-red-500 text-white font-bold px-4 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">Logout</a>
   </div>
   <div class="w-full">
    <div

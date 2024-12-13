@@ -16,10 +16,8 @@ class AuthInterfaces {
      .then((result) => result)
      .catch((err) => [false, err]);
 
-    if (message) {
+    if (token) {
      return res.status(ResponseCode.OKE).json({ status: true, message: message, token: token });
-    } else {
-     throw new Error(`${token}`);
     }
    } catch (err) {
     return res.status(ResponseCode.SERVER_ERROR).json({ status: ResponseCode.SERVER_ERROR, message: `URL Endpoint Method catch ${err}` });

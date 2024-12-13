@@ -29,13 +29,12 @@ class AuthService {
    const $sessDatas = await $conn.query("SELECT * FROM user_session_jwt WHERE id_user = $1", [user.id]);
    const tmpSessData = $sessDatas.rows;
 
+   const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, APP_SECRET, { expiresIn: "1d" });
    if (!(tmpSessData).length) {
-    const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, APP_SECRET, { expiresIn: "1d" });
     await $conn.query("INSERT INTO user_session_jwt (id_user, jwt) VALUES ($1, $2)", [user.id, token]);
-    resolve(["Success Login", token]);
-   } else {
-    reject(`Failure Login`);
    }
+
+   resolve(["Success Login", token]);
   });
  }
 
