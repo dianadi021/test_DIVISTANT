@@ -15,12 +15,12 @@ class AuthService {
    const res = await $conn.query("SELECT id, username, email, password FROM users WHERE username = $1", [username]);
    const user = res.rows[0];
    if (!user) {
-    return reject("User not found");
+    return reject([false, "User not found"]);
    }
 
    const isValid = await Bcrypt.compare(password, user.password);
    if (!isValid) {
-    reject("Incorrect password");
+    reject([false, "Incorrect password"]);
    }
 
    const jwt = require("jsonwebtoken");
