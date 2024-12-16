@@ -40,7 +40,7 @@ class ServiceInterfaces {
 					}
 					
 					if (typeof Callback === "object") {
-						return res.status(ResponseCode.NOT_FOUND).json({ status: ResponseCode.NOT_FOUND, message: `Gagal memproses ${Callback}` });
+						return res.status(ResponseCode.NOT_FOUND).json({ status: ResponseCode.NOT_FOUND, message: `Gagal memproses ${Callback}`, format: Callback });
 					}
 				}
 

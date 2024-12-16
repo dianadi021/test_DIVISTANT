@@ -30,6 +30,18 @@ const router = createRouter({
    },
   },
   {
+   path: "/book/detail",
+   name: "book.detail",
+   component: () => import("../views/Book.vue"),
+   beforeEnter: (to, from, next) => {
+    if (CheckTokenJWT()) {
+     next();
+    } else {
+     next("/dashboard");
+    }
+   },
+  },
+  {
    path: "/logout",
    name: "logout",
    component: () => import("../components/partials/Logout.vue"),

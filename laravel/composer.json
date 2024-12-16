@@ -37,8 +37,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
             "@php artisan key:generate",
-            "@php artisan migrate",
-            "npm i"
+            "@php artisan migrate"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
