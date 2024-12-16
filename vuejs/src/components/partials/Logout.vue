@@ -47,6 +47,8 @@
      $("#loadingAjax").hide();
     },
    });
+  } else {
+    history.back();
   }
  });
 </script>

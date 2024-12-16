@@ -23,7 +23,7 @@ class AuthInterfaces {
         
     }
    } catch (err) {
-    return res.status(ResponseCode.SERVER_ERROR).json({ status: ResponseCode.SERVER_ERROR, message: `URL Endpoint Method catch ${err}` });
+    return res.status(ResponseCode.SERVER_ERROR).json({ status: ResponseCode.SERVER_ERROR, message: `${err}` });
    }
   });
 
@@ -41,7 +41,7 @@ class AuthInterfaces {
      throw new Error(callback ? callback : `Tidak ada session user`);
     }
    } catch (err) {
-    return res.status(ResponseCode.SERVER_ERROR).json({ status: ResponseCode.SERVER_ERROR, message: `URL Endpoint Method catch ${err}` });
+    return res.status(ResponseCode.SERVER_ERROR).json({ status: ResponseCode.SERVER_ERROR, message: `${err}` });
    }
   });
 
